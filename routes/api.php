@@ -22,12 +22,12 @@ Route::namespace('App\Http\Controllers\Api')->group(function() {
 	Route::post('login', 'UserController@login');
 	Route::post('register', 'UserController@register');
 
-	Route::get('movies', 'MovieController@get');
-	Route::post('movie/like', 'GameController@likeMovie');
+	Route::get('movies', 'MovieController@get')->middleware('auth:sanctum');
+	Route::post('movie/like', 'GameController@likeMovie')->middleware('auth:sanctum');
 
-	Route::get('team', 'TeamController@index');
-	Route::post('team', 'TeamController@store');
+	Route::get('team', 'TeamController@index')->middleware('auth:sanctum');
+	Route::post('team', 'TeamController@store')->middleware('auth:sanctum');
 
-	Route::post('game/join', 'GameController@joinGame');
-	Route::post('game/invite', 'GameController@inviteFriend');
+	Route::post('game/join', 'GameController@joinGame')->middleware('auth:sanctum');
+	Route::post('game/invite', 'GameController@inviteFriend')->middleware('auth:sanctum');
 });
