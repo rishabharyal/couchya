@@ -38,7 +38,33 @@ class TeamService {
 		];
 	}
 
+	public function getAllTeams() {
+		$teams = Auth::user()->teams;
+		$data = [];
+
+		foreach ($teams as $key => $team) {
+			$teamMembers = $this->getTeamMembers($team);
+			$data[] = [
+				'id' => $team->id,
+                'title' => $team->title,
+                'code' => $team->code,
+                'members' => $teamMembers
+			];
+		}
+
+		return [
+			'success' => true,
+			'data' => $data
+		];
+
+	}
+
+	private function getTeamMembers($teamInfo) {
+		return User::whereIn('id', $teamInfo->members()->pluck('user_id')->toArray())->get()->toArray();
+	}
+
 	public function getTeam($teamId) {
+
 	    $teamInfo = $this->teamRepo->getTeam($teamId);
 
 	    if (!$teamInfo) {
@@ -48,9 +74,9 @@ class TeamService {
             ];
         }
 
-	    $teamMembers = User::whereIn('id', $teamInfo->members()->pluck('user_id')->toArray())->get()->toArray();
+	    $teamMembers = $this->getTeamMembers($teamInfo);
 
-	    return response()->json([
+	    return [
 	        'success' => true,
             'data' => [
                 'id' => $teamInfo->id,
@@ -58,7 +84,7 @@ class TeamService {
                 'code' => $teamInfo->code,
                 'members' => $teamMembers
             ]
-        ]);
+        ];
     }
 
 	public function joinTeam($teamId) {

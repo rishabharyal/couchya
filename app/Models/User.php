@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Team;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -44,5 +45,9 @@ class User extends Authenticatable
 
     public function getProfilePictureAttribute($value) {
         return $value ?? 'https://www.flaticon.com/svg/static/icons/svg/3638/3638191.svg';
+    }
+
+    public function teams() {
+        return $this->hasMany(Team::class);
     }
 }

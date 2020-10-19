@@ -24,7 +24,7 @@ class TeamController extends Controller
 	}
 
     public function index() {
-        
+        return response()->json($this->teamService->getAllTeams());
     }
 
     /**
