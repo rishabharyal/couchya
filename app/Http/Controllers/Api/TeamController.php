@@ -27,6 +27,10 @@ class TeamController extends Controller
         return response()->json($this->teamService->getAllTeams());
     }
 
+    public function join($id) {
+        return response()->json($this->teamService->joinTeam($id));
+    }
+
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse

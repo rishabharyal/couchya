@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\GameParticipant;
 use App\Models\Movie;
 use App\Models\UserLikes;
 use App\Repos\MovieRepo;
@@ -27,14 +26,11 @@ class MovieService {
 	 */
 	private $movieModel;
 
-	private $gameParticipantModel;
-
 	private $userLikesModel;
 
-	public function __construct(UserLikes $userLikesModel, MovieRepo $movieRepo, GameParticipant $gameParticipantModel) {
+	public function __construct(UserLikes $userLikesModel, MovieRepo $movieRepo) {
 		$this->userLikesModel = $userLikesModel;
 		$this->movieRepo = $movieRepo;
-		$this->gameParticipantModel = $gameParticipantModel;
 	}
 
 	public function likeMovie($movieId, $teamId) {
