@@ -23,6 +23,10 @@ class TeamController extends Controller
 		$this->teamService = $teamService;
 	}
 
+    public function index() {
+        
+    }
+
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse

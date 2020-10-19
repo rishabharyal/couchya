@@ -41,4 +41,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getProfilePictureAttribute($value) {
+        return $value ?? 'https://www.flaticon.com/svg/static/icons/svg/3638/3638191.svg';
+    }
 }

@@ -25,7 +25,7 @@ Route::namespace('App\Http\Controllers\Api')->group(function() {
 	Route::get('movies', 'MovieController@get');
 	Route::post('movie/like', 'GameController@likeMovie');
 
-	
+	Route::get('team', 'TeamController@index');
 	Route::post('team', 'TeamController@store');
 
 	Route::post('game/join', 'GameController@joinGame');

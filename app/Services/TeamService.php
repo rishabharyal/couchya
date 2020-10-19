@@ -3,10 +3,14 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Repos\TeamMemberRepo;
 use App\Repos\TeamRepo;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
 
 class TeamService {
+
+	use WithoutMiddleware;
 
 	/**
 	 * @author Rishabh Aryal <rish.aryal@gmail.com>
