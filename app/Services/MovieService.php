@@ -57,15 +57,17 @@ class MovieService {
 		];
 	}
 
-	public function get($pageNumber, $genre, $range_start, $range_end): Collection {
+	public function get($pageNumber, $genre, $range_start, $range_end): array {
 		$movies = $this->movieRepo->get($pageNumber, $genre, $range_start, $range_end);
-		if ($movies === []) {
-			return $movies;
+		if ($movies != []) {
+			$this->movies = $movies;
+			$movies = $this->saveMovieFromApiToDatabase();
 		}
-		$this->movies = $movies;
-		$movieList = $this->saveMovieFromApiToDatabase();
 
-		return $movieList;
+		return [
+			'success' => true,
+			'data' => $movies
+		];
 	}
 
 	public function saveMovieFromApiToDatabase(): Collection {

@@ -25,7 +25,7 @@ Route::namespace('App\Http\Controllers\Api')->group(function() {
 	Route::post('login', 'UserController@login');
 	Route::post('register', 'UserController@register');
 
-	Route::get('movies', 'MovieController@get')->middleware('auth:sanctum');
+	Route::get('movies', 'MovieController@get');
 	Route::post('movie/like', 'GameController@likeMovie')->middleware('auth:sanctum');
 
 	Route::get('team', 'TeamController@index')->middleware('auth:sanctum');
