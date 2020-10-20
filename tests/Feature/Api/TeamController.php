@@ -63,6 +63,7 @@ class TeamController extends TestCase
                 'title' => $teamTitle,
             ]
         ]);
+        $this->assertEquals(count($response->json()['data']['members']), 1);
     }
 
     /**
@@ -103,8 +104,8 @@ class TeamController extends TestCase
         $this->assertEquals(count($response->json()['data']['members']), 10);
     }
 
-    public function testJoinTeamWillJoinUserToTheTeam() {
-        $team = $this->teams->first();
-        $response = $this->actingAs($this->user)->get('api/team/join/' . $team->id);
-    }
+    // public function testJoinTeamWillJoinUserToTheTeam() {
+    //     $team = $this->teams->first();
+    //     $response = $this->actingAs($this->user)->get('api/team/join/' . $team->id);
+    // }
 }

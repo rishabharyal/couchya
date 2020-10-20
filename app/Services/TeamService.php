@@ -26,14 +26,17 @@ class TeamService {
 	}
 
 	public function createTeam($teamName): array {
-		$team = $this->teamRepo->create($teamName, Auth::id());
+		$userId = Auth::id();
+		$team = $this->teamRepo->create($teamName, $userId);
+		$this->teamMemberRepo->create($team->id, $userId);
 
 		return [
 			'success' => true,
 			'data' => [
 				'title' => $team->title,
 				'code' => $team->code,
-				'id' => $team->id
+				'id' => $team->id,
+				'members' => $this->getTeamMembers($team)
 			]
 		];
 	}
@@ -59,8 +62,8 @@ class TeamService {
 
 	}
 
-	private function getTeamMembers($teamInfo) {
-		return User::whereIn('id', $teamInfo->members()->pluck('user_id')->toArray())->get()->toArray();
+	private function getTeamMembers($team) {
+		return User::whereIn('id', $team->members()->pluck('user_id')->toArray())->get()->toArray();
 	}
 
 	public function getTeam($teamId) {
@@ -100,7 +103,9 @@ class TeamService {
 		];
 	}
 
-	public function inviteFriendToTeam($friends) {
-
+	public function invite($phoneNumbers) {
+		foreach ($phoneNumbers as $key => $phoneNumber) {
+			// send the message to the following users...
+		}
 	}
 }
