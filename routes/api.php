@@ -29,9 +29,9 @@ Route::namespace('App\Http\Controllers\Api')->group(function() {
 	Route::post('movie/like', 'GameController@likeMovie')->middleware('auth:sanctum');
 
 	Route::get('team', 'TeamController@index')->middleware('auth:sanctum');
+	Route::post('team/invite', 'TeamController@inviteFriend')->middleware('auth:sanctum');
 	Route::get('team/join/{id}', 'TeamController@join')->middleware('auth:sanctum');
 	Route::get('team/{id}', 'TeamController@show')->middleware('auth:sanctum');
 	Route::post('team', 'TeamController@store')->middleware('auth:sanctum');
 
-	Route::post('team/invite', 'TeamController@inviteFriend')->middleware('auth:sanctum');
 });

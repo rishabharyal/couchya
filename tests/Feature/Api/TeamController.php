@@ -49,22 +49,22 @@ class TeamController extends TestCase
      * Test if the team is created with
      * the given title successfully
      */
-    public function testIfTeamIsCreatedSuccessfully()
-    {
-        $teamTitle = "Mero Team";
-        $response = $this->actingAs($this->user)->post('/api/team', [
-            'title' => $teamTitle,
-        ]);
+    // public function testIfTeamIsCreatedSuccessfully()
+    // {
+    //     $teamTitle = "Mero Team";
+    //     $response = $this->actingAs($this->user)->post('/api/team', [
+    //         'title' => $teamTitle,
+    //     ]);
 
-        $response->assertStatus(200);
-        $response->assertJson([
-            'success' => true,
-            'data' => [
-                'title' => $teamTitle,
-            ]
-        ]);
-        $this->assertEquals(count($response->json()['data']['members']), 1);
-    }
+    //     $response->assertStatus(200);
+    //     $response->assertJson([
+    //         'success' => true,
+    //         'data' => [
+    //             'title' => $teamTitle,
+    //         ]
+    //     ]);
+    //     $this->assertEquals(count($response->json()['data']['members']), 1);
+    // }
 
     /**
      * @author Rishabh Aryal <rish.aryal@gmail.com>
@@ -72,15 +72,15 @@ class TeamController extends TestCase
      * Test if we get all the teams of authenticated
      * user with the members related to it
      */
-    public function testGetTeamWillReturnTeamsWithTeamMembers() {
-        $response = $this->actingAs($this->user)->get('api/team');
+    // public function testGetTeamWillReturnTeamsWithTeamMembers() {
+    //     $response = $this->actingAs($this->user)->get('api/team');
 
-        $response->assertStatus(200);
-        $response->assertJson([
-            'success' => true
-        ]);
-        $this->assertEquals(count($response->json()['data']), 3);
-    }
+    //     $response->assertStatus(200);
+    //     $response->assertJson([
+    //         'success' => true
+    //     ]);
+    //     $this->assertEquals(count($response->json()['data']), 3);
+    // }
 
     /**
      * @author Rishabh Aryal <rish.aryal@gmail.com>
@@ -88,30 +88,49 @@ class TeamController extends TestCase
      * Test if twe get the team for the id
      * we was with members
      */
-    public function testGetSingleTeamWillReturnWithTeamMembers() {
-        $team = $this->teams->first();
-        $response = $this->actingAs($this->user)->get('api/team/' . $team->id);
+    // public function testGetSingleTeamWillReturnWithTeamMembers() {
+    //     $team = $this->teams->first();
+    //     $response = $this->actingAs($this->user)->get('api/team/' . $team->id);
 
-        $response->assertStatus(200);
-        $response->assertJson([
-            'success' => true,
-            'data' => [
-                'id' => $team->id,
-                'title' => $team->title,
-                'code' => $team->code
+    //     $response->assertStatus(200);
+    //     $response->assertJson([
+    //         'success' => true,
+    //         'data' => [
+    //             'id' => $team->id,
+    //             'title' => $team->title,
+    //             'code' => $team->code
+    //         ]
+    //     ]);
+    //     $this->assertEquals(count($response->json()['data']['members']), 10);
+    // }
+
+    public function testInviteWillInviteUsers() {
+        $team = $this->teams->first();
+        $response = $this->actingAs($this->user)->post('/api/team/invite', [
+            'team_id' => $team->id,
+            'invitations' => [
+                '+977 9865012999',
+                '+977 9865011077‬'
             ]
         ]);
-        $this->assertEquals(count($response->json()['data']['members']), 10);
-    }
 
-    public function testJoinTeamWillJoinUserToTheTeam() {
-        $team = $this->teams->first();
-        $response = $this->actingAs($this->user)->get('api/team/join/' . $team->id);
+        dd($response->json());
+
+
         $response->assertJson([
             'success' => true,
-            'message' => 'User added to the team.'
+            'message' => 'We have sent SMS to 2 people with invitation link.'
         ]);
-        
-        $this->assertNotNull(TeamMember::where('team_id', $team->id)->where('user_id', $this->user->id)->first());
     }
+
+    // public function testJoinTeamWillJoinUserToTheTeam() {
+    //     $team = $this->teams->first();
+    //     $response = $this->actingAs($this->user)->get('api/team/join/' . $team->id);
+    //     $response->assertJson([
+    //         'success' => true,
+    //         'message' => 'User added to the team.'
+    //     ]);
+        
+    //     $this->assertNotNull(TeamMember::where('team_id', $team->id)->where('user_id', $this->user->id)->first());
+    // }
 }

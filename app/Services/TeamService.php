@@ -110,6 +110,12 @@ class TeamService {
 	public function invite($teamId, $phoneNumbers) {
 		$user = Auth::user();
 		$message = $user->name . " has invited you to choose movies on Couchya. Follow this link to join the team: com.couchya://team/join?id=" . $teamId;
+
 		$this->twilioService->sendMessage($phoneNumbers, $message);
+		return [
+			'success' => true,
+			'message' => 'We have sent SMS to '. $this->twilioService->getNumberOfPeopleInvited() . ' people with invitation link.'
+		];
+
 	}
 }
