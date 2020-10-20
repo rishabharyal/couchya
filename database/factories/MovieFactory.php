@@ -22,8 +22,20 @@ class MovieFactory extends Factory
     public function definition()
     {
         return [
-            'unogs_id' => uniqid('id_', true),
-            'netflix_id' => 
+            'unogs_id' => rand(9999999,99999999),
+            'netflix_id' => rand(9999999,99999999),
+            'image' => 'http://couchya.test/image.png',
+            'poster' => 'http://couchya.test/poster.png',
+            'vtype' => 'series',
+            'imdb_id' => rand(9999999,99999999),
+            'title' => 'Test Series',
+            'clist' => '{}',
+            'synopsis' => 'The story began like this, this an example. Yay!',
+            'imdb_rating' => 7.5,
+            'title_date' => date('Y-m-d'),
+            'average_rating' => 6.87,
+            'release_year' => date('Y'),
+            'runtime' => '128'
         ];
     }
 }

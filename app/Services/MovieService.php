@@ -6,6 +6,7 @@ use App\Models\Movie;
 use App\Models\UserLikes;
 use App\Repos\MovieRepo;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class MovieService {
 	/**
@@ -33,11 +34,11 @@ class MovieService {
 		$this->movieRepo = $movieRepo;
 	}
 
-	public function likeMovie($movieId, $teamId) {
+	public function likeMovie($movieId) {
 		$userId = Auth::user()->id;
 		$recordExists = $this->userLikesModel
 			->where('user_id', $userId)
-			->where('team_id', $teamId)
+			->where('movie_id', $movieId)
 			->first();
 
 		if ($recordExists) {
@@ -47,7 +48,7 @@ class MovieService {
 
 		$this->userLikesModel = new UserLikes();
 		$this->userLikesModel->user_id = $userId;
-		$this->userLikesModel->team_id = $teamId;
+		$this->userLikesModel->movie_id = $movieId;
 		$this->userLikesModel->save();
 
 		return [

@@ -15,7 +15,7 @@ class UserLikedAMovieEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    private $userLikes;
+    public $userLikes;
 
     /**
      * Create a new event instance.

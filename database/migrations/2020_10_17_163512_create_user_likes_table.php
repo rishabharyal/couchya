@@ -17,10 +17,8 @@ class CreateUserLikesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('movie_id');
-            $table->unsignedBigInteger('team_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('movie_id')->references('id')->on('movies');
-            $table->foreign('team_id')->references('id')->on('teams');
             $table->timestamps();
         });
     }

@@ -3,35 +3,33 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Services\TeamService;
 use App\Services\MovieService;
+use App\Services\TeamService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class GameController extends Controller
 {
-	private $teamService;
 	private $movieService;
 
-	public function __construct(TeamService $teamService, MovieService $movieService) {
-		$this->teamService = $teamService;
+	public function __construct(MovieService $movieService) {
 		$this->movieService = $movieService;
 	}
 
     public function likeMovie(Request $request) {
     	$validator = Validator::make($request->all(), [
 			'movie_id' => ['required', 'exists:movies,id'],
-			'team_id' => ['required', 'exists:teams,id']
 		]);
 
 		if ($validator->fails()) {
 			return response()->json([
 				'success' => false,
 				'data' => $validator->errors(),
-				'message' => 'The movie or team no longer exist.'
+				'message' => 'The movie does not exist!'
 			]);
 		}
 
-		$response = $this->movieService->likeMovie($request->get('movie_id'), $request->get('team_id'));
+		$response = $this->movieService->likeMovie($request->get('movie_id'));
 		return response()->json($response);
     }
 }
