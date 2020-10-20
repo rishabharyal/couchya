@@ -31,7 +31,6 @@ class TwilioService {
 				]);
 				$sent++;
 			} catch (Exception $e) {
-				dd($e);
 				$failed++;
 				continue;
 			}
