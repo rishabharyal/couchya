@@ -55,6 +55,7 @@ class TeamController extends Controller
     public function inviteFriend(Request $request) {
         $validator = Validator::make($request->all(), [
             'invitations' => ['required', 'array'],
+            'team_id' => ['required', 'exists:teams,id']
         ]);
 
         if ($validator->fails()) {
@@ -64,7 +65,7 @@ class TeamController extends Controller
             ]);
         }
 
-        return response()->json($this->teamService->invite($request->get('invitations')));
+        return response()->json($this->teamService->invite($request->get('team_id'), $request->get('invitations')));
     }
 
     public function show($id) {

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use App\Repos\TeamMemberRepo;
 use App\Repos\TeamRepo;
+use App\Services\TwilioService;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,9 +21,12 @@ class TeamService {
 
 	private $teamMemberRepo;
 
-	public function __construct(TeamRepo $teamRepo, TeamMemberRepo $teamMemberRepo) {
+	private $twilioService;
+
+	public function __construct(TeamRepo $teamRepo, TeamMemberRepo $teamMemberRepo, TwilioService $twilioService) {
 		$this->teamRepo = $teamRepo;
 		$this->teamMemberRepo = $teamMemberRepo;
+		$this->twilioService = $twilioService;
 	}
 
 	public function createTeam($teamName): array {
@@ -103,9 +107,9 @@ class TeamService {
 		];
 	}
 
-	public function invite($phoneNumbers) {
-		foreach ($phoneNumbers as $key => $phoneNumber) {
-			// send the message to the following users...
-		}
+	public function invite($teamId, $phoneNumbers) {
+		$user = Auth::user();
+		$message = $user->name . " has invited you to choose movies on Couchya. Follow this link to join the team: com.couchya://team/join?id=" . $teamId;
+		$this->twilioService->sendMessage($phoneNumbers, $message);
 	}
 }

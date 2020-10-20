@@ -104,8 +104,14 @@ class TeamController extends TestCase
         $this->assertEquals(count($response->json()['data']['members']), 10);
     }
 
-    // public function testJoinTeamWillJoinUserToTheTeam() {
-    //     $team = $this->teams->first();
-    //     $response = $this->actingAs($this->user)->get('api/team/join/' . $team->id);
-    // }
+    public function testJoinTeamWillJoinUserToTheTeam() {
+        $team = $this->teams->first();
+        $response = $this->actingAs($this->user)->get('api/team/join/' . $team->id);
+        $response->assertJson([
+            'success' => true,
+            'message' => 'User added to the team.'
+        ]);
+        
+        $this->assertNotNull(TeamMember::where('team_id', $team->id)->where('user_id', $this->user->id)->first());
+    }
 }
