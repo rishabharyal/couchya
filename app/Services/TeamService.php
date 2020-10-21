@@ -2,12 +2,16 @@
 
 namespace App\Services;
 
+use App\Models\Movie;
+use App\Models\TeamMember;
 use App\Models\User;
+use App\Models\UserLikes;
 use App\Repos\TeamMemberRepo;
 use App\Repos\TeamRepo;
 use App\Services\TwilioService;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TeamService {
 
@@ -115,6 +119,44 @@ class TeamService {
 		return [
 			'success' => true,
 			'message' => 'We have sent SMS to '. $this->twilioService->getNumberOfPeopleInvited() . ' people with invitation link.'
+		];
+
+	}
+
+	public function getMatches($teamId) {
+		$usersRelatedToTheTeam = TeamMember::where('team_id', $teamId)->pluck('user_id')->toArray();
+		$userLikes = DB::table('user_likes')
+			->select(DB::raw('COUNT(user_id) as total_count, movie_id'))
+			->whereIn('user_id', $usersRelatedToTheTeam)
+			->groupBy(['movie_id']);
+
+		$data = [];
+
+		foreach ($userLikes->get() as $key => $userLike) {
+			if ($userLike->total_count < 2) {
+				continue;
+			}
+
+			$movie = Movie::find($userLike->movie_id);
+
+			$userIds = UserLikes::where('movie_id', $movie->id)->whereIn('user_id', $usersRelatedToTheTeam)->pluck('user_id')->toArray();
+
+			$datum = [
+				'id' => $movie->id,
+				'title' => $movie->title,
+				'poster' => $movie->poster,
+				'image' => $movie->image,
+				'genre' => 'Comedy',
+				'release_year' => $movie->release_year,
+				'likers' => User::whereIn('id', $userIds)->get(['id', 'name', 'profile_picture'])
+			];
+
+			$data[] = $datum;
+		}
+
+		return [
+			'success' => true,
+			'data' => $data
 		];
 
 	}
