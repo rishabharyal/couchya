@@ -116,6 +116,8 @@ class TeamService {
 		$number = str_replace('+', '', $number);
 		$number = str_replace('-', '', $number);
 		$number = str_replace(' ', '', $number);
+		$number = str_replace('(', '', $number);
+		$number = str_replace(')', '', $number);
 
 		if (strlen($number) <= 10) {
 			$number = '' . $number;
