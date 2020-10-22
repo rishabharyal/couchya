@@ -22,6 +22,7 @@ class TeamController extends TestCase
     private $members;
     private $movies;
     private $likes;
+    private $invitation;
 
     protected function setUp():void {
         parent::setUp();
@@ -60,7 +61,7 @@ class TeamController extends TestCase
             }
         }
 
-        Invitation::forceCreate([
+        $this->invitation = Invitation::forceCreate([
             'user_id' => $this->user->id,
             'team_id' => $this->teams->first()->id,
             'invited_by' => $this->user->id,
@@ -68,13 +69,27 @@ class TeamController extends TestCase
         ]);
 
     }
+
+    public function testShowInvitationWillReturnAllInvitations() {
+        $response = $this->actingAs($this->user)->get('api/invitations');
+        $response->assertJson([
+            'success' => true,
+            'data' => [
+                [
+                    'id' => $this->invitation->id,
+                    'team_id' => $this->invitation->team_id
+                ]
+            ]
+        ]);
+    }
+
     public function testShowTeamPageWillShoreMoviesWithLikes() {
         $team = $this->teams->first();
         $response = $this->actingAs($this->user)->post('api/matches/team', [
             'team_id' => $team->id
         ]);
 
-        // test if the assertions are right..
+        $this->assertEquals(count($response->json()['data']), 10);
     }
 
     /**
@@ -113,8 +128,7 @@ class TeamController extends TestCase
         $response->assertJson([
             'success' => true
         ]);
-        $this->assertEquals(count($response->json()['data']['teams']), 3);
-        $this->assertEquals(count($response->json()['data']['invitations']), 1);
+        $this->assertEquals(count($response->json()['data']), 3);
     }
 
     /**

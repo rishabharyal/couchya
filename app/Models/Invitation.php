@@ -13,4 +13,8 @@ class Invitation extends Model
     public function inviter() {
     	return $this->belongsTo(User::class, 'invited_by');
     }
+
+    public function team() {
+    	return $this->belongsTo(Team::class);
+    }
 }

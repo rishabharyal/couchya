@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\InvitationService;
 use App\Services\TeamService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -15,12 +16,15 @@ class TeamController extends Controller
      */
     private $teamService;
 
+    private $invitationService;
+
     /**
      * TeamController constructor.
      * @param TeamService $teamService
      */
-    public function __construct(TeamService $teamService) {
+    public function __construct(TeamService $teamService, InvitationService $invitationService) {
 		$this->teamService = $teamService;
+        $this->invitationService = $invitationService;
 	}
 
     public function index() {
@@ -29,6 +33,10 @@ class TeamController extends Controller
 
     public function join($id) {
         return response()->json($this->teamService->joinTeam($id));
+    }
+
+    public function getInvitations() {
+        return response()->json($this->invitationService->getInvitations());
     }
 
     /**

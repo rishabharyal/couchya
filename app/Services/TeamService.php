@@ -53,25 +53,11 @@ class TeamService {
 
 	public function getAllTeams() {
 		$teams = Auth::user()->allTeams()->get();
-		$invitations = [];
-		$allInvs = Invitation::where('user_id', Auth::id())->get();
-		foreach ($allInvs as $key => $invitation) {
-			$team = Team::find($invitation->team_id);
-			$invitations[] = [
-				'id' => $invitation->id,
-				'team_id' => $invitation->team_id,
-				'team_name' => $team->title,
-				'invitation_from' => User::where('id', $invitation->invited_by)->first()
-			];
-		}
-		$data = [
-			'teams' => [],
-			'invitations' => $invitations
-		];
+		$data = [];
 
 		foreach ($teams as $key => $team) {
 			$teamMembers = $this->getTeamMembers($team);
-			$data['teams'][] = [
+			$data[] = [
 				'id' => $team->id,
                 'title' => $team->title,
                 'code' => $team->code,
@@ -122,6 +108,11 @@ class TeamService {
 		if (!$alreadyInTeam) {
 			$this->teamMemberRepo->create($teamId, $userId);
 		}
+
+		DB::table('invitations')
+			->where('team_id', $teamId)
+			->where('user_id', $userId)
+			->delete();
 
 		return [
 			'success' => true,
