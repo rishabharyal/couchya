@@ -134,13 +134,17 @@ class TeamService {
 		return $number;
 	}
 
+	private function onlyNumber($number) {
+		return substr($number, -10);
+	}
+
 	public function invite($teamId, $phoneNumbers) {
 		$user = Auth::user();
 		$message = $user->name . ' has invited you to join a team. Please open the app or download ' . env('APP_NAME') . ' app from store if not installed.';
 
 		foreach ($phoneNumbers as $key => $phoneNumber) {
 			$cleanedPhoneNumber = $this->cleanPhoneNumber($phoneNumber);
-			$invitedUser = User::where('phone_number', $cleanedPhoneNumber)->first();
+			$invitedUser = User::where('phone_number', $this->onlyNumber($cleanedPhoneNumber))->first();
 			$invitation = new Invitation();
 			$invitation->invitated_to_phone = $cleanedPhoneNumber;
 			$invitation->invited_by = $user->id;
