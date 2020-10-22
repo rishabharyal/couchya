@@ -155,10 +155,11 @@ class TeamService {
 			$invitation->save();
 		}
 
-		$this->twilioService->sendMessage($phoneNumbers, $message);
+		// $this->twilioService->sendMessage($phoneNumbers, $message);
 		return [
 			'success' => true,
-			'message' => 'We have sent SMS to '. $this->twilioService->getNumberOfPeopleInvited() . ' people with invitation link.'
+			'message' => 'We have sent SMS to '. count($phoneNumbers) . ' people with invitation link.'
+			// 'message' => 'We have sent SMS to '. $this->twilioService->getNumberOfPeopleInvited() . ' people with invitation link.'
 		];
 
 	}
