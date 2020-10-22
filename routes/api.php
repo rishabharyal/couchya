@@ -35,7 +35,7 @@ Route::namespace('App\Http\Controllers\Api')->group(function() {
 	Route::post('matches/team', 'TeamController@getMatches')->middleware('auth:sanctum');
 	Route::post('team', 'TeamController@store')->middleware('auth:sanctum');
 
-	Route::post('/invitations/{id}/reject', 'TeamController@delete')->middleware('auth:sanctum');
+	Route::post('/invitations/{id}/reject', 'TeamController@deleteInvitation')->middleware('auth:sanctum');
 	Route::get('/invitations', 'TeamController@getInvitations')->middleware('auth:sanctum');
 
 });
