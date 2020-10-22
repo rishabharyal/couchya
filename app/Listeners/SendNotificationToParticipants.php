@@ -32,7 +32,7 @@ class SendNotificationToParticipants
         $phoneNumber = $this->cleanPhoneNumber($user->country_code . $user->phone_number);
         $phoneNumber = $this->onlyNumber($phoneNumber);
 
-        $invitations = Invitation::where('invitated_to_phone', $phoneNumber)->get();
+        $invitations = Invitation::where('invitated_to_phone', 'LIKE', "%" . $phoneNumber. "%")->get();
         foreach ($invitations as $key => $invitation) {
             $invitation->user_id = $user->id;
             $invitation->save();
