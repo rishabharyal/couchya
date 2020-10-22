@@ -120,7 +120,7 @@ class TeamService {
 		$number = str_replace(')', '', $number);
 
 		if (strlen($number) <= 10) {
-			$number = '' . $number;
+			$number = '1' . $number;
 		}
 
 		return $number;
