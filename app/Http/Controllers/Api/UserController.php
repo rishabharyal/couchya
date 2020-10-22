@@ -15,6 +15,9 @@ class UserController extends Controller
 			'name' => ['required'],
 			'email' => ['required', 'email', 'max:255', 'unique:users'],
 			'password' => ['required', 'string', 'min:8'],
+            'country' => ['required'],
+            'country_code' => ['required'],
+            'phone_number' => ['required'],
 		]);
 
 
@@ -29,6 +32,9 @@ class UserController extends Controller
 		$user->name = $request->get('name');
 		$user->password = bcrypt($request->password);
 		$user->email = $request->get('email');
+        $user->country = $request->get('country');
+        $user->phone_number = $request->get('phone_number');
+        $user->country_code = $request->get('country_code');
 		$user->save();
 
 		$token = $user->createToken('couchya');

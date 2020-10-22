@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Invitation;
 use App\Models\Movie;
 use App\Models\TeamMember;
 use App\Models\User;
@@ -50,7 +51,7 @@ class TeamService {
 	}
 
 	public function getAllTeams() {
-		$teams = Auth::user()->teams;
+		$teams = Auth::user()->allTeams()->get();
 		$data = [];
 
 		foreach ($teams as $key => $team) {
@@ -111,9 +112,26 @@ class TeamService {
 		];
 	}
 
+	private function cleanPhoneNumber($number) {
+		return $number;
+	}
+
 	public function invite($teamId, $phoneNumbers) {
 		$user = Auth::user();
-		$message = $user->name . " has invited you to choose movies on Couchya. Follow this link to join the team: com.couchya://team/join?id=" . $teamId;
+		$message = $user->name . ' has invited you to join a team. Please open the app or download ' . env('APP_NAME') . ' app from store if not installed.';
+
+		foreach ($phoneNumbers as $key => $phoneNumber) {
+			$cleanedPhoneNumber = $this->cleanPhoneNumber($phoneNumber);
+			$invitedUser = User::where('phone_number', $cleanedPhoneNumber)->first();
+			$invitation = new Invitation();
+			$invitation->invitated_to_phone = $cleanedPhoneNumber;
+			$invitation->invited_by = $user->id;
+			$invitation->team_id = $teamId;
+			if ($invitedUser) {
+				$invitation->user_id = $invitedUser->id;
+			}
+			$invitation->save();
+		}
 
 		$this->twilioService->sendMessage($phoneNumbers, $message);
 		return [

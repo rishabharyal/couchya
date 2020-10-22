@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use App\Models\Invitation;
 use App\Models\Movie;
 use App\Models\Team;
 use App\Models\TeamMember;
@@ -46,6 +47,7 @@ class TeamController extends TestCase
         }
 
         $this->movies = Movie::factory(10)->create();
+
         $this->likes = collect();
 
         foreach ($this->users as $key => $user) {
@@ -59,14 +61,14 @@ class TeamController extends TestCase
         }
 
     }
-    public function testShowTeamPageWillShoreMoviesWithLikes() {
-        $team = $this->teams->first();
-        $response = $this->actingAs($this->user)->post('api/matches/team', [
-            'team_id' => $team->id
-        ]);
+    // public function testShowTeamPageWillShoreMoviesWithLikes() {
+    //     $team = $this->teams->first();
+    //     $response = $this->actingAs($this->user)->post('api/matches/team', [
+    //         'team_id' => $team->id
+    //     ]);
 
-        dd($response->json());
-    }
+    //     // test if the assertions are right..
+    // }
 
     // /**
     //  * @author Rishabh Aryal <rish.aryal@gmail.com>
@@ -91,12 +93,12 @@ class TeamController extends TestCase
     //     $this->assertEquals(count($response->json()['data']['members']), 1);
     // }
 
-    // /**
-    //  * @author Rishabh Aryal <rish.aryal@gmail.com>
-    //  * @return void
-    //  * Test if we get all the teams of authenticated
-    //  * user with the members related to it
-    //  */
+    /**
+     * @author Rishabh Aryal <rish.aryal@gmail.com>
+     * @return void
+     * Test if we get all the teams of authenticated
+     * user with the members related to it
+     */
     // public function testGetTeamWillReturnTeamsWithTeamMembers() {
     //     $response = $this->actingAs($this->user)->get('api/team');
 
@@ -139,6 +141,7 @@ class TeamController extends TestCase
     //         ]
     //     ]);
 
+    //     $this->assertNotNull(Invitation::where('invitated_to_phone', '+9779865012999')->where('invited_by', $this->user->id)->first());
     //     $response->assertJson([
     //         'success' => true,
     //         'message' => 'We have sent SMS to 2 people with invitation link.'

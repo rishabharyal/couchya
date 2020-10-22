@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Invitation;
 use App\Models\Team;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -44,10 +45,19 @@ class User extends Authenticatable
     ];
 
     public function getProfilePictureAttribute($value) {
-        return $value ?? 'https://www.flaticon.com/svg/static/icons/svg/3638/3638191.svg';
+        return 'https://scontent.fktm6-1.fna.fbcdn.net/v/t1.0-9/121458715_382767076442437_984656816686362051_n.jpg';
     }
 
     public function teams() {
         return $this->hasMany(Team::class);
+    }
+
+    public function invitations() {
+        return $this->hasMany(Invitation::class);
+    }
+
+    public function allTeams() {
+        return Team::where('user_id', $this->id)
+            ->orWhereIn('id', TeamMember::where('user_id', $this->id)->pluck('team_id')->toArray());
     }
 }

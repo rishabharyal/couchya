@@ -46,7 +46,10 @@ class UserController extends TestCase
         $response = $this->post('/api/register', [
             'email' => $newUser->email,
             'password' => 'password',
-            'name' => $newUser->name
+            'name' => $newUser->name,
+            'country' => 'NP',
+            'country_code' => '977',
+            'phone_number' => '9876765656'
         ]);
 
         $response->assertStatus(200);
