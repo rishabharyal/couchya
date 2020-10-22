@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -36,6 +37,8 @@ class UserController extends Controller
         $user->phone_number = $request->get('phone_number');
         $user->country_code = $request->get('country_code');
 		$user->save();
+
+        event(new Registered($user));
 
 		$token = $user->createToken('couchya');
 

@@ -113,6 +113,14 @@ class TeamService {
 	}
 
 	private function cleanPhoneNumber($number) {
+		$number = str_replace('+', '', $number);
+		$number = str_replace('-', '', $number);
+		$number = str_replace(' ', '', $number);
+
+		if (strlen($number) <= 10) {
+			$number = '' . $number;
+		}
+
 		return $number;
 	}
 
