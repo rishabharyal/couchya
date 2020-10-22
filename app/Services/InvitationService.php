@@ -13,7 +13,7 @@ class InvitationService {
 	}
 
 	public function delete($id) {
-		$this->invitationModel = $this->invitationModel->where('id', $id)->first();
+		$this->invitationModel = $this->invitationModel->where('user_id', Auth::id())->where('id', $id)->first();
 		$this->invitationModel->delete();
 	}
 
