@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Invitation;
 use App\Models\Movie;
+use App\Models\Team;
 use App\Models\TeamMember;
 use App\Models\User;
 use App\Models\UserLikes;
@@ -52,17 +53,33 @@ class TeamService {
 
 	public function getAllTeams() {
 		$teams = Auth::user()->allTeams()->get();
-		$data = [];
+		$invitations = [];
+		$allInvs = Invitation::where('user_id', Auth::id())->get();
+		foreach ($allInvs as $key => $invitation) {
+			$team = Team::find($invitation->team_id);
+			$invitations[] = [
+				'id' => $invitation->id,
+				'team_id' => $invitation->team_id,
+				'team_name' => $team->title,
+				'invitation_from' => User::where('id', $invitation->invited_by)->first()
+			];
+		}
+		$data = [
+			'teams' => [],
+			'invitations' => $invitations
+		];
 
 		foreach ($teams as $key => $team) {
 			$teamMembers = $this->getTeamMembers($team);
-			$data[] = [
+			$data['teams'][] = [
 				'id' => $team->id,
                 'title' => $team->title,
                 'code' => $team->code,
                 'members' => $teamMembers
 			];
 		}
+
+
 
 		return [
 			'success' => true,

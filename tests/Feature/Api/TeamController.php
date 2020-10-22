@@ -60,38 +60,45 @@ class TeamController extends TestCase
             }
         }
 
+        Invitation::forceCreate([
+            'user_id' => $this->user->id,
+            'team_id' => $this->teams->first()->id,
+            'invited_by' => $this->user->id,
+            'invitated_to_phone' => '9779865012999',
+        ]);
+
     }
-    // public function testShowTeamPageWillShoreMoviesWithLikes() {
-    //     $team = $this->teams->first();
-    //     $response = $this->actingAs($this->user)->post('api/matches/team', [
-    //         'team_id' => $team->id
-    //     ]);
+    public function testShowTeamPageWillShoreMoviesWithLikes() {
+        $team = $this->teams->first();
+        $response = $this->actingAs($this->user)->post('api/matches/team', [
+            'team_id' => $team->id
+        ]);
 
-    //     // test if the assertions are right..
-    // }
+        // test if the assertions are right..
+    }
 
-    // /**
-    //  * @author Rishabh Aryal <rish.aryal@gmail.com>
-    //  * @return void
-    //  * Test if the team is created with
-    //  * the given title successfully
-    //  */
-    // public function testIfTeamIsCreatedSuccessfully()
-    // {
-    //     $teamTitle = "Mero Team";
-    //     $response = $this->actingAs($this->user)->post('/api/team', [
-    //         'title' => $teamTitle,
-    //     ]);
+    /**
+     * @author Rishabh Aryal <rish.aryal@gmail.com>
+     * @return void
+     * Test if the team is created with
+     * the given title successfully
+     */
+    public function testIfTeamIsCreatedSuccessfully()
+    {
+        $teamTitle = "Mero Team";
+        $response = $this->actingAs($this->user)->post('/api/team', [
+            'title' => $teamTitle,
+        ]);
 
-    //     $response->assertStatus(200);
-    //     $response->assertJson([
-    //         'success' => true,
-    //         'data' => [
-    //             'title' => $teamTitle,
-    //         ]
-    //     ]);
-    //     $this->assertEquals(count($response->json()['data']['members']), 1);
-    // }
+        $response->assertStatus(200);
+        $response->assertJson([
+            'success' => true,
+            'data' => [
+                'title' => $teamTitle,
+            ]
+        ]);
+        $this->assertEquals(count($response->json()['data']['members']), 1);
+    }
 
     /**
      * @author Rishabh Aryal <rish.aryal@gmail.com>
@@ -99,63 +106,64 @@ class TeamController extends TestCase
      * Test if we get all the teams of authenticated
      * user with the members related to it
      */
-    // public function testGetTeamWillReturnTeamsWithTeamMembers() {
-    //     $response = $this->actingAs($this->user)->get('api/team');
+    public function testGetTeamWillReturnTeamsWithTeamMembers() {
+        $response = $this->actingAs($this->user)->get('api/team');
 
-    //     $response->assertStatus(200);
-    //     $response->assertJson([
-    //         'success' => true
-    //     ]);
-    //     $this->assertEquals(count($response->json()['data']), 3);
-    // }
+        $response->assertStatus(200);
+        $response->assertJson([
+            'success' => true
+        ]);
+        $this->assertEquals(count($response->json()['data']['teams']), 3);
+        $this->assertEquals(count($response->json()['data']['invitations']), 1);
+    }
 
-    // /**
-    //  * @author Rishabh Aryal <rish.aryal@gmail.com>
-    //  * @return void
-    //  * Test if twe get the team for the id
-    //  * we was with members
-    //  */
-    // public function testGetSingleTeamWillReturnWithTeamMembers() {
-    //     $team = $this->teams->first();
-    //     $response = $this->actingAs($this->user)->get('api/team/' . $team->id);
+    /**
+     * @author Rishabh Aryal <rish.aryal@gmail.com>
+     * @return void
+     * Test if twe get the team for the id
+     * we was with members
+     */
+    public function testGetSingleTeamWillReturnWithTeamMembers() {
+        $team = $this->teams->first();
+        $response = $this->actingAs($this->user)->get('api/team/' . $team->id);
 
-    //     $response->assertStatus(200);
-    //     $response->assertJson([
-    //         'success' => true,
-    //         'data' => [
-    //             'id' => $team->id,
-    //             'title' => $team->title,
-    //             'code' => $team->code
-    //         ]
-    //     ]);
-    //     $this->assertEquals(count($response->json()['data']['members']), 10);
-    // }
+        $response->assertStatus(200);
+        $response->assertJson([
+            'success' => true,
+            'data' => [
+                'id' => $team->id,
+                'title' => $team->title,
+                'code' => $team->code
+            ]
+        ]);
+        $this->assertEquals(count($response->json()['data']['members']), 10);
+    }
 
-    // public function testInviteWillInviteUsers() {
-    //     $team = $this->teams->first();
-    //     $response = $this->actingAs($this->user)->post('/api/team/invite', [
-    //         'team_id' => $team->id,
-    //         'invitations' => [
-    //             '+9779865012999',
-    //             '+9779865011077'
-    //         ]
-    //     ]);
+    public function testInviteWillInviteUsers() {
+        $team = $this->teams->first();
+        $response = $this->actingAs($this->user)->post('/api/team/invite', [
+            'team_id' => $team->id,
+            'invitations' => [
+                '+9779865012999',
+                '+9779865011077'
+            ]
+        ]);
 
-    //     $this->assertNotNull(Invitation::where('invitated_to_phone', '+9779865012999')->where('invited_by', $this->user->id)->first());
-    //     $response->assertJson([
-    //         'success' => true,
-    //         'message' => 'We have sent SMS to 2 people with invitation link.'
-    //     ]);
-    // }
+        $this->assertNotNull(Invitation::where('invitated_to_phone', '+9779865012999')->where('invited_by', $this->user->id)->first());
+        $response->assertJson([
+            'success' => true,
+            'message' => 'We have sent SMS to 2 people with invitation link.'
+        ]);
+    }
 
-    // public function testJoinTeamWillJoinUserToTheTeam() {
-    //     $team = $this->teams->first();
-    //     $response = $this->actingAs($this->user)->get('api/team/join/' . $team->id);
-    //     $response->assertJson([
-    //         'success' => true,
-    //         'message' => 'User added to the team.'
-    //     ]);
+    public function testJoinTeamWillJoinUserToTheTeam() {
+        $team = $this->teams->first();
+        $response = $this->actingAs($this->user)->get('api/team/join/' . $team->id);
+        $response->assertJson([
+            'success' => true,
+            'message' => 'User added to the team.'
+        ]);
         
-    //     $this->assertNotNull(TeamMember::where('team_id', $team->id)->where('user_id', $this->user->id)->first());
-    // }
+        $this->assertNotNull(TeamMember::where('team_id', $team->id)->where('user_id', $this->user->id)->first());
+    }
 }
