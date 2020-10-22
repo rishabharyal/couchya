@@ -39,6 +39,15 @@ class TeamController extends Controller
         return response()->json($this->invitationService->getInvitations());
     }
 
+    public function deleteInvitation($id) {
+        $this->invitationService->delete($id);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Invitation deleted successfully!'
+        ]);
+    }
+
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse

@@ -12,6 +12,11 @@ class InvitationService {
 		$this->invitationModel = $invitationModel;
 	}
 
+	public function delete($id) {
+		$this->invitationModel = $this->invitationModel->where('id', $id)->first();
+		$this->invitationModel->delete();
+	}
+
 	public function getInvitations() {
 		$invitations = [];
 		$allInvitations = Invitation::where('user_id', Auth::id())->get();
