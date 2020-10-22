@@ -45,7 +45,7 @@ class User extends Authenticatable
     ];
 
     public function getProfilePictureAttribute($value) {
-        return 'https://scontent.fktm6-1.fna.fbcdn.net/v/t1.0-9/121458715_382767076442437_984656816686362051_n.jpg';
+        return 'https://png.pngtree.com/png-clipart/20190924/original/pngtree-business-people-avatar-icon-user-profile-free-vector-png-image_4815126.jpg';
     }
 
     public function teams() {
