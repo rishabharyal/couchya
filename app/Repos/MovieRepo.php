@@ -2,15 +2,23 @@
 
 namespace App\Repos;
 
-class MovieRepo {
-	public function create() {
+use App\Models\Genre;
+use App\Models\Movie;
 
+class MovieRepo
+{
+	public function getFromDB($page, $genre, $range_start, $range_end): array
+	{
+		$genreModel  = Genre::where('name', $genre)->first();
+		if (!$genreModel) return [];
+		return Movie::where('genre_id', $genreModel->id)->get()->toArray();
 	}
 
-	public function get($page, $genre, $range_start, $range_end): array {
+	public function getFromApi($page, $genre, $range_start, $range_end): array
+	{
 		$curl = curl_init();
 		curl_setopt_array($curl, [
-			CURLOPT_URL => "https://rapidapi.p.rapidapi.com/search?start_year=1972&orderby=rating&audiosubtitle_andor=and&limit=100&subtitle=english&countrylist=78%2C46&audio=english&country_andorunique=unique&offset=". $page . "&end_year=2019",
+			CURLOPT_URL => "https://rapidapi.p.rapidapi.com/search?start_year=1972&orderby=rating&audiosubtitle_andor=and&limit=100&subtitle=english&countrylist=78%2C46&audio=english&country_andorunique=unique&offset=" . $page . "&end_year=2019",
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_ENCODING => "",

@@ -2,13 +2,15 @@
 
 namespace App\Services;
 
+use App\Models\Genre;
 use App\Models\Movie;
 use App\Models\UserLikes;
 use App\Repos\MovieRepo;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
-class MovieService {
+class MovieService
+{
 	/**
 	 * @author Rishabh Aryal <rish.aryal@gmail.com>
 	 * @var Movierepo $movieRepo
@@ -21,6 +23,9 @@ class MovieService {
 	 */
 	private $movies;
 
+
+	private $movieGenre;
+
 	/**
 	 * @author Rishabh Aryal <rish.aryal@gmail.com>
 	 * @var Movie description
@@ -29,12 +34,14 @@ class MovieService {
 
 	private $userLikesModel;
 
-	public function __construct(UserLikes $userLikesModel, MovieRepo $movieRepo) {
+	public function __construct(UserLikes $userLikesModel, MovieRepo $movieRepo)
+	{
 		$this->userLikesModel = $userLikesModel;
 		$this->movieRepo = $movieRepo;
 	}
 
-	public function likeMovie($movieId) {
+	public function likeMovie($movieId)
+	{
 		$userId = Auth::user()->id;
 		$recordExists = $this->userLikesModel
 			->where('user_id', $userId)
@@ -57,55 +64,16 @@ class MovieService {
 		];
 	}
 
-	public function get($pageNumber, $genre, $range_start, $range_end): array {
-		$movies = $this->movieRepo->get($pageNumber, $genre, $range_start, $range_end);
+	public function get($pageNumber, $genre, $range_start, $range_end): array
+	{
+		$movies = $this->movieRepo->getFromDB($pageNumber, $genre, $range_start, $range_end);
 		if ($movies != []) {
 			$this->movies = $movies;
-			$movies = $this->saveMovieFromApiToDatabase();
 		}
 
 		return [
 			'success' => true,
 			'data' => $movies
 		];
-	}
-
-	public function saveMovieFromApiToDatabase(): Collection {
-		$movieUnogsIds = array_map(function($item) {
-			return $item['id'];
-		}, $this->movies);
-
-		$moviesCollection = collect();
-		$movieList = [];
-
-		$existingMovies = Movie::whereIn('unogs_id', $movieUnogsIds)->pluck('id', 'unogs_id')->toArray();
-
-		foreach ($this->movies as $key => $movie) {
-			$this->movieModel = new Movie();
-			$this->movieModel->unogs_id = $movie['id'];
-			$this->movieModel->netflix_id = $movie['nfid'];
-			$this->movieModel->image = $movie['img'];
-			$this->movieModel->poster = $movie['poster'];
-			$this->movieModel->vtype = $movie['vtype'];
-			$this->movieModel->imdb_id = $movie['imdbid'];
-			$this->movieModel->title = $movie['title'];
-			$this->movieModel->clist = $movie['clist'];
-			$this->movieModel->synopsis = $movie['synopsis'];
-			$this->movieModel->imdb_rating = $movie['imdbrating'];
-			$this->movieModel->title_date = $movie['titledate'];
-			$this->movieModel->average_rating = $movie['avgrating'];
-			$this->movieModel->release_year = $movie['year'];
-			$this->movieModel->runtime = $movie['runtime'];
-
-			if (!isset($existingMovies[$movie['id']])) {
-				$this->movieModel->save();
-			} else {
-				$this->movieModel->id = $existingMovies[$movie['id']];
-			}
-
-			$moviesCollection->push($this->movieModel);
-		}
-
-		return $moviesCollection;
 	}
 }

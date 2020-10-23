@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Movie extends Model
 {
-    use HasFactory;
+	use HasFactory;
 
-    protected $fillable = [
-    	'unogs_id',
+	protected $fillable = [
+		'unogs_id',
 		'netflix_id',
 		'image',
 		'poster',
@@ -24,5 +24,10 @@ class Movie extends Model
 		'average_rating',
 		'release_year',
 		'runtime',
-    ];
+	];
+
+	public function genre()
+	{
+		$this->belongsTo(Genre::class);
+	}
 }
