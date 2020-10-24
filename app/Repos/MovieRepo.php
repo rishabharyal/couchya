@@ -9,9 +9,9 @@ class MovieRepo
 {
 	public function getFromDB($page, $genre, $range_start, $range_end): array
 	{
-		$genreModel  = Genre::where('name', $genre)->first();
-		if (!$genreModel) return [];
-		return Movie::where('genre_id', $genreModel->id)->get()->toArray();
+		// $genreModel  = Genre::where('name', $genre)->first();
+		// if (!$genreModel) return [];
+		return Movie::all()->toArray();
 	}
 
 	public function getFromApi($page, $genre, $range_start, $range_end): array

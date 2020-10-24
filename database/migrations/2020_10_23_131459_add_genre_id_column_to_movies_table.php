@@ -14,7 +14,7 @@ class AddGenreIdColumnToMoviesTable extends Migration
     public function up()
     {
         Schema::table('movies', function (Blueprint $table) {
-            $table->unsignedBigInteger('genre_id');
+            $table->unsignedBigInteger('genre_id')->nullable();
             $table->foreign('genre_id')->references("id")->on("genres")->onDelete('cascade');
         });
     }

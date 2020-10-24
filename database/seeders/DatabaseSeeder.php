@@ -15,18 +15,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $users = \App\Models\User::factory(10)->create();
+        // $users = \App\Models\User::factory(10)->create();
 
-        foreach ($users as $key => $user) {
-            $team = Team::factory()->create([
-                'user_id' => $user->id
-            ]);
+        // foreach ($users as $key => $user) {
+        //     $team = Team::factory()->create([
+        //         'user_id' => $user->id
+        //     ]);
 
-            $teamMember = TeamMember::factory()->create([
-                'team_id' => $team->id,
-                'user_id' => $team->user_id
-            ]);
-        }
+        //     $teamMember = TeamMember::factory()->create([
+        //         'team_id' => $team->id,
+        //         'user_id' => $team->user_id
+        //     ]);
+        // }
 
         $this->call([
             GenreSeeder::class
