@@ -11,7 +11,7 @@ class MovieRepo
 	{
 		// $genreModel  = Genre::where('name', $genre)->first();
 		// if (!$genreModel) return [];
-		return Movie::all()->toArray();
+		return Movie::take(350)->get()->toArray();
 	}
 
 	public function getFromApi($page, $genre, $range_start, $range_end): array
