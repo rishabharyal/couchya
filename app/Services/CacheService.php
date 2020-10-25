@@ -30,10 +30,14 @@ class CacheService
     {
         $genres = Genre::all();
 
+        if ($genres->count() === 0) {
+            $this->movieRepo->createGenreEntries();
+            return $this->handle();
+        }
+
         foreach ($genres as $genre) {
-            var_dump("Getting for model " . $genre->name);
             $this->genre = $genre;
-            $this->movies = $this->movieRepo->getFromApi(1, $genre->name, 0, 0);
+            $this->movies = $this->movieRepo->getFromApi(1, $genre->id, 0, 0);
             $this->saveMovieFromApiToDatabase();
         }
     }
