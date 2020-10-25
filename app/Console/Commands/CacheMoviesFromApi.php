@@ -16,7 +16,7 @@ class CacheMoviesFromApi extends Command
      * @var string
      */
 
-    private CacheService $service;
+    private $service;
     protected $signature = 'movies:cache';
 
     /**
