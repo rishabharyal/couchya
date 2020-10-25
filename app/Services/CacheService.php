@@ -45,12 +45,12 @@ class CacheService
 
     private function saveMovieFromApiToDatabase(): Collection
     {
-        $movieUnogsIds = array_map(function ($item) {
-            return $item['id'];
-        }, $this->movies);
 
         $moviesCollection = collect();
         $movieList = [];
+        $movieUnogsIds = array_map(function ($item) {
+            return $item['id'];
+        }, $this->movies);
 
         $existingMovies = Movie::whereIn('unogs_id', $movieUnogsIds)->pluck('id', 'unogs_id')->toArray();
 
