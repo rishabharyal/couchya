@@ -127,9 +127,9 @@ class TeamService {
 		$number = str_replace('(', '', $number);
 		$number = str_replace(')', '', $number);
 
-		if (strlen($number) <= 10) {
-			$number = '1' . $number;
-		}
+		// if (strlen($number) <= 10) {
+		// 	$number = '1' . $number;
+		// }
 
 		return $number;
 	}
