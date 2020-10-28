@@ -158,12 +158,11 @@ class TeamController extends TestCase
         $response = $this->actingAs($this->user)->post('/api/team/invite', [
             'team_id' => $team->id,
             'invitations' => [
-                '+9779865012999',
-                '+9779865011077'
+                '+977 9865011077',
             ]
         ]);
 
-        $this->assertNotNull(Invitation::where('invitated_to_phone', '+9779865012999')->where('invited_by', $this->user->id)->first());
+        $this->assertNotNull(Invitation::where('invitated_to_phone', '+9779865011077')->where('invited_by', $this->user->id)->first());
         $response->assertJson([
             'success' => true,
             'message' => 'We have sent SMS to 2 people with invitation link.'

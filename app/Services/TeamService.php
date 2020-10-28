@@ -143,7 +143,7 @@ class TeamService {
 		$message = $user->name . ' has invited you to join a team. Please open the app or download ' . env('APP_NAME') . ' app from store if not installed.';
 
 		foreach ($phoneNumbers as $key => $phoneNumber) {
-			$cleanedPhoneNumber = $this->cleanPhoneNumber($phoneNumber);
+			$cleanedPhoneNumber = '+1' . $this->onlyNumber($this->cleanPhoneNumber($phoneNumber));
 			$invitedUser = User::where('phone_number', $this->onlyNumber($cleanedPhoneNumber))->first();
 			$invitation = new Invitation();
 			$invitation->invitated_to_phone = $cleanedPhoneNumber;
@@ -155,7 +155,7 @@ class TeamService {
 			$invitation->save();
 		}
 
-		// $this->twilioService->sendMessage($phoneNumbers, $message);
+		$this->twilioService->sendMessage($phoneNumbers, $message);
 		return [
 			'success' => true,
 			'message' => 'We have sent invitation to '. count($phoneNumbers) . ' people. '
